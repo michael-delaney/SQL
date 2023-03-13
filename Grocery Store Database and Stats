@@ -1,0 +1,24 @@
+CREATE TABLE store (id INTEGER PRIMARY KEY , name TEXT, aisle INTEGER, price NUMERIC, quantity INTEGER);
+
+INSERT INTO store VALUES (1, "apples", 4, 0.99, 12);
+INSERT INTO store VALUES (2, "lettuce", 6, 0.59, 15);
+INSERT INTO store VALUES (3, "oranges", 3, 1.99, 13);
+INSERT INTO store VALUES (4, "mangos", 2, 3.99, 14);
+INSERT INTO store VALUES (5, "beef", 3, 4.99, 17);
+INSERT INTO store VALUES (6, "chicken", 5, 5.99, 19);
+INSERT INTO store VALUES (7, "turkey", 9, 3.99, 21);
+INSERT INTO store VALUES (8, "sausage", 6, 7.99, 11);
+INSERT INTO store VALUES (9, "ribs", 2, 9.99, 1);
+INSERT INTO store VALUES (10, "bacon", 3, 10.99, 15);
+INSERT INTO store VALUES (11, "pork", 7, 20.99, 16);
+INSERT INTO store VALUES (12, "waffles", 3, 3.99, 2);
+INSERT INTO store VALUES (13, "ice cream", 1, 6.99, 1);
+INSERT INTO store VALUES (14, "chocolate", 7, 5.99, 5);
+INSERT INTO store VALUES (15, "sugar", 3, 4.99, 7);
+INSERT INTO store VALUES (16, "donuts", 5, 2.99, 82);
+
+--display database ordered by pricing
+SELECT * FROM store ORDER by price;
+
+--sum quantity and display aisle for each product
+SELECT id, COUNT(DISTINCT aisle), SUM(quantity) FROM store;
