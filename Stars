@@ -1,0 +1,29 @@
+-- create table with famous stars
+CREATE TABLE stars(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    age INTEGER);
+    
+INSERT INTO stars (fullname, age) VALUES ("Tom Cruise", 45);
+INSERT INTO stars (fullname, age) VALUES ("Taylor Swift", 33);
+INSERT INTO stars (fullname, age) VALUES ("Katy Perry", 37);
+INSERT INTO stars (fullname, age) VALUES ("Chris Rock", 52);
+INSERT INTO stars (fullname, age) VALUES ("Arnold S.", 72);
+
+-- create table with jobs of famous people
+CREATE TABLE job(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    name TEXT);
+    
+INSERT INTO job (person_id, name) VALUES (1, "Actor");
+INSERT INTO job (person_id, name) VALUES (2, "Singer");
+INSERT INTO job (person_id, name) VALUES (3, "Singer");
+INSERT INTO job (person_id, name) VALUES (4, "Comedian");
+INSERT INTO job (person_id, name) VALUES (5, "Actor");
+
+
+-- select stars with their matching job
+SELECT stars.fullname, job.name FROM stars
+LEFT JOIN job
+ON stars.id = job.person_id;
