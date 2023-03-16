@@ -1,0 +1,40 @@
+--I'm querying a database with multiple tables in it to quantify statistics about customer and order data
+--Used with SQLite
+
+--1. How many orders were placed in January?
+SELECT COUNT(*) FROM JanSales
+WHERE length(orderID) = 6;
+
+--2. How many of those orders were for an iPhone?
+SELECT COUNT(*) FROM JanSales
+WHERE length(orderID) = 6
+AND Product = 'iPhone';
+
+--3. Select the customer account numbers for all the orders that were placed in February.
+SELECT c.acctnum FROM customers AS c
+JOIN FebSales AS f
+ON c.order_id = f.orderID
+WHERE length(c.order_id) = 6
+GROUP BY c.acctnum;
+
+--4. Which product was the cheapest one sold in January, and what was the price?
+SELECT Product, MIN(price) FROM JanSales
+GROUP BY product, price
+ORDER BY price
+LIMIT 1;
+
+--5. What is the total revenue for each product sold in January? (Revenue can be calculated using the number of products sold and the price of the products).
+SELECT Product, SUM(quantity)*price as Revenue FROM JanSales
+GROUP BY Product
+ORDER BY Revenue;
+
+--6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT Product, Quantity, (Quantity * price) AS Revenue FROM FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101';
+
+--7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+SELECT DISTINCT COUNT(c.acctnum), AVG(quantity * price) FROM customers AS c
+JOIN FebSales as F
+ON c.order_id = f.orderID
+WHERE f.quantity > 2
+AND length(f.orderid) = 6; 
