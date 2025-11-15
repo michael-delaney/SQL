@@ -1,0 +1,177 @@
+--Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").
+SELECT firstname
+, lastname
+, customerid
+, country
+FROM customers
+WHERE country <> 'USA'
+;
+
+
+--Show only the Customers from Brazil.
+SELECT firstname
+, lastname
+, customerid
+, country
+FROM customers
+WHERE country = 'Brazil'
+;
+
+--Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, 
+--Date of the invoice, and billing country.
+SELECT cust.firstname
+, cust.lastname
+, inv.invoiceid
+, inv.invoicedate
+, inv.billingcountry
+FROM customers AS cust
+INNER JOIN invoices AS inv
+ON cust.customerid = inv.customerid
+WHERE cust.country = 'Brazil'
+;
+
+
+--Show the Employees who are Sales Agents.
+SELECT firstname
+, lastname
+, title
+FROM employees
+WHERE title LIKE 'Sales%Agent'
+;
+
+--Find a unique/distinct list of billing countries from the Invoice table.
+SELECT DISTINCT billingcountry
+FROM invoices
+;
+
+--Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT inv.invoiceid
+, emp.firstname
+, emp.lastname
+FROM invoices as inv
+LEFT JOIN customers AS cust
+ON inv.customerid = cust.customerid
+    LEFT JOIN employees AS emp
+    ON cust.supportrepid = emp.employeeid
+;
+
+--Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT inv.invoiceid
+, inv.total
+, cust.firstname
+, cust.lastname
+, cust.country
+, emp.firstname
+, emp.lastname
+, emp.title
+FROM invoices as inv
+LEFT JOIN customers AS cust
+ON inv.customerid = cust.customerid
+    LEFT JOIN employees AS emp
+    ON cust.supportrepid = emp.employeeid
+;
+
+
+--How many Invoices were there in 2009?
+SELECT count(invoiceid)
+FROM invoices
+WHERE invoicedate LIKE '%2009%'
+;
+
+--What are the total sales for 2009?
+SELECT SUM(total)
+FROM invoices
+WHERE invoicedate LIKE '%2009%'
+;
+
+--Write a query that includes the purchased track name with each invoice line ID.
+SELECT inv.invoicelineid
+, tracks.name
+FROM invoice_items AS inv
+LEFT JOIN tracks
+ON inv.trackid = tracks.trackid
+;
+
+
+--Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT inv.invoicelineid
+, tracks.name AS track_name
+, artists.Name AS artist_name
+FROM invoice_items AS inv
+LEFT JOIN tracks
+ON inv.trackid = tracks.trackid
+    LEFT JOIN albums
+    ON tracks.AlbumId = albums.AlbumId
+        LEFT JOIN artists
+        ON albums.ArtistId = artists.ArtistId
+;
+
+
+--Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT tracks.name AS track_name
+, albums.Title AS album_title
+, media_types.name AS media_name
+, genres.name AS genre_name
+FROM tracks
+
+LEFT JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+
+LEFT JOIN media_types
+ON tracks.MediaTypeId = media_types.MediaTypeId
+
+LEFT JOIN genres
+ON tracks.genreid = genres.GenreId
+;
+
+--Show the total sales made by each sales agent.
+SELECT employees.firstname
+, employees.lastname
+, SUM(invoices.total) AS sales
+FROM employees
+
+LEFT JOIN customers
+ON employees.EmployeeId = customers.SupportRepId
+
+LEFT JOIN invoices
+ON customers.CustomerId = invoices.CustomerId
+
+GROUP BY employees.lastname
+HAVING sales > 0
+; 
+
+--Which sales agent made the most dollars in sales in 2009?
+SELECT employees.firstname
+, employees.lastname
+, SUM(invoices.total) AS sales
+FROM employees
+
+LEFT JOIN customers
+ON employees.EmployeeId = customers.SupportRepId
+
+LEFT JOIN invoices
+ON customers.CustomerId = invoices.CustomerId
+
+WHERE invoicedate LIKE '%2009%'
+GROUP BY employees.lastname
+ORDER BY sales DESC
+LIMIT 1
+;
+
+--How many customers?
+SELECT count(DISTINCT customerid)
+FROM customers
+;
+
+--How many items sold?
+SELECT sum(quantity)
+FROM invoice_items
+;
+
+--Shortest song?
+SELECT tracks.Milliseconds AS length
+, tracks.Name
+FROM tracks
+ORDER BY length
+LIMIT 1
+;
